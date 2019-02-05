@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="Ant_Maven" basedir="." default="init" >
+    <property name="project.bin.dir" value="bin"/>
+    <property name="project.lib.dir" value="lib" />
+    <property name="project.src.dir" value="src" />
+    <target name="init" depends="clean">
+        <echo message="creating bin folder" />
+        <mkdir dir="${project.bin.dir}"/>
+        <echo>Creating lib folder</echo>
+        <mkdir dir="lib"/>
+    </target>
+    <target name="clean">
+        <delete dir="${project.bin.dir}"/>
+        <delete>
+            <fileset dir="${project.lib.dir}" includes="*.jar"/>
+        </delete>
+    </target>
+    <target name="compile" depends="init">
+        <javac srcdir="${project.src.dir}" destdir="${project.bin.dir}"/>
+    </target>
+    <target name="package" depends="compile">
+        <jar destfile="${project.lib.dir}/${ant.project.name}.jar" basedir="${project.bin.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="Main"/>
+            </manifest>
+        </jar>
+    </target>
+    <target name="run" depends="package">
+     <java jar="${project.lib.dir}/${ant.project.name}.jar" fork="true"></java>
+    </target>
+</project>
